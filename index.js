@@ -67,21 +67,23 @@ module.exports = (mail) => {
          }
        }
 
-       const localNameLength = simplifyLocalName(localName, service).length
+       localName = simplifyLocalName(localName, service)
+       const localNameLength = localName.length
+
        if(localNameLength < services[service].minChar || localNameLength > services[service].maxChar) {
          return {valid: false, mail: mail}
        } else {
          if(services[service].rule.test(localName)) {
            if(services[service].commonName) {
-             return {valid: true, mail: mail, simplify: simplifyLocalName(localName, service) + '@' + services[service].commonName }
+             return {valid: true, mail: mail, simplify: localName + '@' + services[service].commonName }
            } else {
-             return {valid: true, mail: mail}
+             return {valid: true, mail: mail, simplify: mail.replace(mail.split('@')[0], localName)}
            }
          } else {
            return {valid: false, mail: mail}
          }
        }
-       // Bu araya
+
      } else {
        // Universal rule in but undefined service
        return {valid: true, mail: mail}
