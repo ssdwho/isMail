@@ -1,4 +1,3 @@
-const _ = require("lodash")
 const universalRule = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
 const services = {
   gmail: {
@@ -36,7 +35,8 @@ function whatIsTheService(mail) {
 }
 
 function getTheService(mail) {
-  return _.findKey(services, (d) => { return d.domain.indexOf(whatIsTheService(mail)) !== -1; })
+  const thisMap = Object.keys(services).map(v => services[v].domain.indexOf(whatIsTheService(mail)))
+  return Object.keys(services)[thisMap.indexOf(parseInt(thisMap.filter(e => e > -1)))]
 }
 
 function countPlus(local) {
@@ -56,6 +56,7 @@ function simplifyLocalName(local, service) {
 }
 
 module.exports = (mail) => {
+  mail = mail.toLowerCase()
 
   if(universalRule.test(mail)) {
     const service = getTheService(mail)
