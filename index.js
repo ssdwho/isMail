@@ -11,7 +11,7 @@ const services = {
     ignoredCharacter: /\./g
   },
   live: {
-    domain: ["outlook", "hotmail", "live", "windoslive", "msn"],
+    domain: ["outlook", "hotmail", "live", "windowslive", "msn"],
     commonName: false,
     rule: /^[a-z](\.?[a-z0-9\-_]){0,}$/,
     plus: true,

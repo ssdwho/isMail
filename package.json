@@ -1,6 +1,6 @@
 {
   "name": "ismail",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "validity checks of the most commonly used services",
   "main": "index.js",
   "author": "ssdwho",
