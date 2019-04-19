@@ -1,27 +1,24 @@
 {
   "name": "ismail",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "validity checks of the most commonly used services",
-  "main": "index.js",
-  "author": "ssdwho",
-  "license": "MIT",
-  "keywords": [
-    "email",
-    "mail",
-    "regex",
-    "gmail",
-    "yandex",
-    "hotmail",
-    "outlook"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md"
   ],
+  "scripts": {
+    "build": "./node_modules/.bin/tsc -p ."
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:ssdwho/ismail.git"
   },
-  "files": [
-    "index.js"
-  ],
-  "homepage": "https://github.com/ssdwho/ismail",
-  "dependencies": {
+  "author": "ssdwho",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^11.13.5",
+    "@types/typescript": "^2.0.0"
   }
 }

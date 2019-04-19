@@ -1,5 +1,5 @@
-const universalRule = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
-const services = {
+const universalRule = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+const services: { [key: string]: any } = {
   gmail: {
     domain: ["gmail", "googlemail"],
     commonName: "gmail.com",
@@ -30,33 +30,33 @@ const services = {
   }
 }
 
-function whatIsTheService(mail) {
-  return mail.match(/(@([a-z0-9]){0,})/g)[0].toString().replace('@', '')
+function whatIsTheService(mail: string): string {
+  return mail.match(/(@([a-z0-9]){0,})/g)![0].toString().replace('@', '');
 }
 
-function getTheService(mail) {
-  const thisMap = Object.keys(services).map(v => services[v].domain.indexOf(whatIsTheService(mail)))
-  return Object.keys(services)[thisMap.indexOf(parseInt(thisMap.filter(e => e > -1)))]
+function getTheService(mail: string): string {
+  const thisMap: any = Object.keys(services).map(v => services[v].domain.indexOf(whatIsTheService(mail)));
+  return Object.keys(services)[thisMap.indexOf(parseInt(thisMap.filter((e: any) => e > -1)))]
 }
 
-function countPlus(local) {
+function countPlus(local: string): number {
   if(local.match(RegExp('\\+', 'g')) !== null) {
-    return local.match(RegExp('\\+', 'g')).length
+    return local.match(RegExp('\\+', 'g'))!.length;
   } else {
-    return 0
+    return 0;
   }
 }
 
-function simplifyLocalName(local, service) {
-  local = local.split('+')[0]
+function simplifyLocalName(local: string, service: string): string {
+  local = local.split('+')[0];
   if(services[service].ignoredCharacter) {
-    local = local.replace(services[service].ignoredCharacter, '')
+    local = local.replace(services[service].ignoredCharacter, '');
   }
-  return local
+  return local;
 }
 
-module.exports = (mail) => {
-  mail = mail.toLowerCase()
+module.exports = (mail: any) => {
+  mail = mail.toLowerCase();
 
   if(universalRule.test(mail)) {
     const service = getTheService(mail)
@@ -92,5 +92,5 @@ module.exports = (mail) => {
   } else {
     // Universal rule out
     return {valid: false, mail: mail}
-  }
+  } 
 }
