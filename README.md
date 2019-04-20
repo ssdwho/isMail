@@ -10,6 +10,9 @@ This package basically checks whether an email address is valid. The main aim is
 ## Import
 
     const ismail = require("ismail")
+or
+    
+    import ismail from "ismail"
 
 ## Request
 
