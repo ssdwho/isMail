@@ -55,7 +55,7 @@ function simplifyLocalName(local: string, service: string): string {
   return local;
 }
 
-export default function (mail: any) {
+module.exports = (mail: string): object => {
   mail = mail.toLowerCase();
 
   if(universalRule.test(mail)) {
