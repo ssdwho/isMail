@@ -1,61 +1,11 @@
-const universalRule = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-const services: { [key: string]: any } = {
-  gmail: {
-    domain: ["gmail", "googlemail"],
-    commonName: "gmail.com",
-    rule: /^[a-z0-9](\.?[a-z0-9]){5,29}$/,
-    plus: true,
-    plusInfinite: true,
-    minChar: 6,
-    maxChar: 30,
-    ignoredCharacter: /\./g
-  },
-  live: {
-    domain: ["outlook", "hotmail", "live", "windowslive", "msn"],
-    commonName: false,
-    rule: /^[a-z](\.?[a-z0-9\-_]){0,}$/,
-    plus: true,
-    plusInfinite: false,
-    minChar: 1,
-    maxChar: 64
-  },
-  yandex: {
-    domain: ["yandex"],
-    commonName: false,
-    rule: /^[a-z]([\.-]?[a-z0-9]){0,}$/,
-    plus: true,
-    plusInfinite: true,
-    minChar: 1,
-    maxChar: 30
-  }
-}
+import getTheService = require("./getTheService");
+import simplifyLocalName = require("./simplifyLocalName");
+import countPlus = require("./countPlus");
+import services from "./services";
 
-function whatIsTheService(mail: string): string {
-  return mail.match(/(@([a-z0-9]){0,})/g)![0].toString().replace('@', '');
-}
+const universalRule:RegExp = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
-function getTheService(mail: string): string {
-  const thisMap: any = Object.keys(services).map(v => services[v].domain.indexOf(whatIsTheService(mail)));
-  return Object.keys(services)[thisMap.indexOf(parseInt(thisMap.filter((e: any) => e > -1)))]
-}
-
-function countPlus(local: string): number {
-  if(local.match(RegExp('\\+', 'g')) !== null) {
-    return local.match(RegExp('\\+', 'g'))!.length;
-  } else {
-    return 0;
-  }
-}
-
-function simplifyLocalName(local: string, service: string): string {
-  local = local.split('+')[0];
-  if(services[service].ignoredCharacter) {
-    local = local.replace(services[service].ignoredCharacter, '');
-  }
-  return local;
-}
-
-module.exports = (mail: string): object => {
+export = function ismail(mail: string) {
   mail = mail.toLowerCase();
 
   if(universalRule.test(mail)) {

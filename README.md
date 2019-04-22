@@ -12,7 +12,7 @@ This package basically checks whether an email address is valid. The main aim is
     const ismail = require("ismail")
 or
     
-    import ismail from "ismail"
+    import * as ismail from "ismail"
 
 ## Request
 
