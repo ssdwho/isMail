@@ -22,7 +22,7 @@ or
 
     {
       "valid": true,
-      "mail": "thismail@isvalid.com"
+      "simplify": "thismail@isvalid.com"
     }
 
 # Prevent multiple using
@@ -42,20 +42,7 @@ Gmail, king of the common addresses.
 
     {
       "valid": true,
-      "mail": "w.i.l.l.i.a.m+hello+my+dear@googlemail.com",
       "simplify": "william@gmail.com"
     }
-
-**Maybe some services support only one '+'**
-
-    ismail("look_at-this+oh+no@outlook.com")
-
-**Output**
-
-    {
-      "valid": false,
-      "mail": "look_at-this+oh+no@outlook.com"
-    }
-
 
 > *These are current rules. Different rules may be applied in the past and a currently available address may not comply with these rules. I'm not sure.*

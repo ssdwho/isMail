@@ -1,46 +1,55 @@
-import getTheService = require("./getTheService");
-import simplifyLocalName = require("./simplifyLocalName");
-import countPlus = require("./countPlus");
-import services from "./services";
+interface ismailOutput {
+  valid: boolean
+  simplify: string
+}
 
-const universalRule:RegExp = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+export = function ismail(data: any): ismailOutput {
+  if(typeof data !== "string") {
+    data = data.toString();
+  }
+  data = data.toLowerCase();
+  let valid:boolean, simplify:string;
 
-export = function ismail(mail: string) {
-  mail = mail.toLowerCase();
+  let da = data.substring(0, data.indexOf('@'));
+  const ta = data.replace(/.*@/, "");
 
-  if(universalRule.test(mail)) {
-    const service = getTheService(mail)
-     if(service !== undefined) {
-       let localName = mail.split('@')[0]
-       if(services[service].plus) {
-         if(!services[service].plusInfinite && countPlus(localName) > 1) {
-           return {valid: false, mail: mail}
-         }
-       }
+  if(data.indexOf('+') >= 0) {
+    da = da.substring(0, da.indexOf('+'));
+    data = `${da}@${ta}`;
+  }
+  
+  const domain = ta.substring(0, ta.indexOf('.'));
+  const domains = ["gmail", "googlemail", "live", "hotmail", "outlook", "windowslive", "msn", "yandex"];
 
-       localName = simplifyLocalName(localName, service)
-       const localNameLength = localName.length
-
-       if(localNameLength < services[service].minChar || localNameLength > services[service].maxChar) {
-         return {valid: false, mail: mail}
-       } else {
-         if(services[service].rule.test(localName)) {
-           if(services[service].commonName) {
-             return {valid: true, mail: mail, simplify: localName + '@' + services[service].commonName }
-           } else {
-             return {valid: true, mail: mail, simplify: mail.replace(mail.split('@')[0], localName)}
-           }
-         } else {
-           return {valid: false, mail: mail}
-         }
-       }
-
-     } else {
-       // Universal rule in but undefined service
-       return {valid: true, mail: mail}
-     }
+  if(!domains.includes(domain)) {
+    const universalRule:RegExp = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+    if(!universalRule.test(data)) {
+      valid = false;
+    } else {
+      valid = true;
+    }
   } else {
-    // Universal rule out
-    return {valid: false, mail: mail}
-  } 
+    const rules = [
+      /(^[a-z0-9](\.?[a-z0-9]){5,29})@(gmail|googlemail)\.com$/,
+      /^[a-z](\.?[a-z0-9\-_]){0,}@(outlook|live|windowslive|hotmail|msn)((\.(([a-z]{2,3}))){1,2})$/,
+      /^[a-z]([\.-]?[a-z0-9]){0,}@yandex((\.(([a-z]{2,3}))){1,2})$/
+    ];
+
+    if(domain == "googlemail" || domain == "gmail") {
+      da = da.split('.').join("");
+      data = `${da}@${ta}`;
+      data = data.replace("googlemail", "gmail");
+    }
+    const control = rules.map((regex) => {
+      return regex.test(data);
+    });
+
+    if(control.includes(true)) {
+      valid = true;
+    } else {
+      valid = false;
+    }
+  }
+  simplify = data;
+  return {"valid": valid, "simplify": simplify}
 }
